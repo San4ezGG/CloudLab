@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="bi bi-upload"></i> Загрузка файла</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Текущая папка: 
+                    {% if current_path %}
+                        <code>{{ current_path }}</code>
+                    {% else %}
+                        Корневая папка
+                    {% endif %}
+                </p>
+                
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="path" value="{{ current_path }}">
+                    
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Выберите файл</label>
+                        <input class="form-control form-control-lg" type="file" name="file" id="file" required>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="/folder?path={{ current_path }}" class="btn btn-secondary me-md-2">
+                            <i class="bi bi-arrow-left"></i> Назад
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-upload"></i> Загрузить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5><i class="bi bi-info-circle"></i> Информация</h5>
+                <ul>
+                    <li>Максимальный размер файла зависит от вашего тарифа Dropbox</li>
+                    <li>Если файл с таким именем уже существует, он будет заменен</li>
+                    <li>Поддерживаются все типы файлов</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

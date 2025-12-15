@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4><i class="bi bi-link"></i> Общие ссылки</h4>
+        <span class="badge bg-primary">{{ links|length }} ссылок</span>
+    </div>
+    <div class="card-body">
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% elif links|length == 0 %}
+            <div class="alert alert-info">
+                У вас нет общих ссылок
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Имя файла/папки</th>
+                            <th>Путь</th>
+                            <th>Ссылка</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for link in links %}
+                        <tr>
+                            <td>
+                                {% if link.path and link.path.endswith('/') %}
+                                    <i class="bi bi-folder-fill text-warning"></i>
+                                {% else %}
+                                    <i class="bi bi-file-earmark text-primary"></i>
+                                {% endif %}
+                                {{ link.name }}
+                            </td>
+                            <td><small class="text-muted">{{ link.path or 'N/A' }}</small></td>
+                            <td>
+                                <a href="{{ link.url }}" target="_blank" class="text-truncate d-inline-block" style="max-width: 300px;">
+                                    {{ link.url }}
+                                </a>
+                            </td>
+                            <td>
+                                <button onclick="copyToClipboard('{{ link.url }}')" 
+                                        class="btn btn-sm btn-outline-secondary" title="Копировать">
+                                    <i class="bi bi-clipboard"></i>
+                                </button>
+                                <a href="{{ link.url }}" target="_blank" 
+                                   class="btn btn-sm btn-outline-primary" title="Открыть">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Ссылка скопирована в буфер обмена!');
+    });
+}
+</script>
+{% endblock %}
